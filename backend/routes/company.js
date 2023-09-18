@@ -81,7 +81,7 @@ router.delete("/:companyId", async (req, res) => {
     res.status(204).end();
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ message: "Failed to delete the company" });
+    res.status(200).json({ message: "Failed to delete the company" });
   }
 });
 
