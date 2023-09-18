@@ -1,5 +1,5 @@
 export interface Product {
-  id: number;
+  id?: number;
   name: string;
   price: number;
   type: string;
@@ -8,16 +8,17 @@ export interface Product {
 }
 
 export interface Company {
-  birth: string;
+  birth: number;
   country: string;
   employee: number;
-  id: number;
+  id?: number;
   name: string;
 }
 
 export interface LoginResponse {
   message: string;
   token: string;
+  isAdmin: boolean;
 }
 
 export interface LoginCredentials {

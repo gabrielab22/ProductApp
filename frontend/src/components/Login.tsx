@@ -24,6 +24,7 @@ function Login() {
     onSuccess: (data) => {
       if ((data.message = "success")) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("isAdmin", data.isAdmin.toString());
         window.dispatchEvent(new Event("storage"));
       }
       navigate("/product/all");
@@ -44,7 +45,9 @@ function Login() {
             className="border-teal-900 p-2 border-2 rounded bg-teal-100"
             {...register("email", { required: true })}
           />
-          {errors.email && <span>This field is required</span>}
+          {errors.email && (
+            <span className="text-red-700">This field is required</span>
+          )}
         </div>
         <div className="flex flex-col">
           <label>Password:</label>
@@ -53,7 +56,9 @@ function Login() {
             className="border-teal-900 p-2 border-2 rounded bg-teal-100"
             {...register("password", { required: true })}
           />
-          {errors.password && <span>This field is required</span>}
+          {errors.password && (
+            <span className="text-red-700">This field is required</span>
+          )}
         </div>
 
         <input
