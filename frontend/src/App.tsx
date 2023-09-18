@@ -12,6 +12,8 @@ import Products from "./components/product/Products";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import EditProduct from "./components/product/EditProduct";
+import EditCompany from "./components/company/EditCompany";
 
 function App() {
   const queryClient = new QueryClient();
@@ -29,12 +31,14 @@ function App() {
             <Route path="product">
               <Route path="all" element={<Products />} />
               <Route path="details/:id" element={<ProductDetails />} />
+              <Route path="edit/:id" element={<EditProduct />} />
               <Route path="add" element={<AddProduct />} />
             </Route>
 
             <Route path="company">
               <Route path="all" element={<Companies />} />
               <Route path="details/:id" element={<CompanyDetails />} />
+              <Route path="edit/:id" element={<EditCompany />} />
               <Route path="add" element={<AddCompany />} />
             </Route>
           </Routes>

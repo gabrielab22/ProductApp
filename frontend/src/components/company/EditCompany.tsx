@@ -1,14 +1,25 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
 import { Company } from "../../types";
-import { useNavigate } from "react-router-dom";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-const postCompany = (data: Company): Promise<any> =>
-  axios.post("company", data).then((response) => response.data);
+const fetchCompany = (id: string): Promise<Company> =>
+  axios.get("company/" + id).then((response) => response.data);
 
-function AddCompany() {
+const putCompany = (company: Company, companyId?: number): Promise<Company> =>
+  axios
+    .put("company/update/" + companyId, company)
+    .then((response) => response.data);
+
+function EditCompany() {
+  let params = useParams();
   const navigate = useNavigate();
+
+  const { data: company } = useQuery({
+    queryKey: ["company"],
+    queryFn: () => fetchCompany(params.id!),
+  });
 
   const {
     register,
@@ -19,10 +30,10 @@ function AddCompany() {
     mutate(data);
   };
 
-  const { mutate, data } = useMutation({
-    mutationFn: (company: Company) => postCompany(company),
-    onSuccess: (data) => {
-      if (data.name) navigate("/company/all");
+  const { mutate } = useMutation({
+    mutationFn: (data: Company) => putCompany(data, company?.id),
+    onSuccess: () => {
+      navigate(`/company/details/${company?.id}`);
     },
     onError: () => alert("Problems"),
   });
@@ -32,10 +43,11 @@ function AddCompany() {
       className="flex flex-col rounded border-teal-900 gap-5 border-2 p-5"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h2 className="font-bold text-2xl">Add company</h2>
+      <h2 className="font-bold text-2xl">Edit company</h2>
       <div className="flex flex-col">
         <label>Name:</label>
         <input
+          defaultValue={company?.name}
           className="border-teal-900 p-2 border-2 rounded bg-teal-100"
           {...register("name", { required: true })}
         />
@@ -46,6 +58,7 @@ function AddCompany() {
       <div className="flex flex-col">
         <label>Country:</label>
         <input
+          defaultValue={company?.country}
           className="border-teal-900 p-2 border-2 rounded bg-teal-100"
           {...register("country", { required: true })}
         />
@@ -58,6 +71,7 @@ function AddCompany() {
         <label>Birth:</label>
         <input
           type="number"
+          defaultValue={company?.birth}
           className="border-teal-900 p-2 border-2 rounded bg-teal-100"
           {...register("birth", { required: true })}
         />
@@ -70,6 +84,7 @@ function AddCompany() {
         <label>Employee:</label>
         <input
           type="number"
+          defaultValue={company?.employee}
           className="border-teal-900 p-2 border-2 rounded bg-teal-100"
           {...register("employee", { required: true })}
         />
@@ -86,4 +101,4 @@ function AddCompany() {
   );
 }
 
-export default AddCompany;
+export default EditCompany;

@@ -19,7 +19,7 @@ function Login() {
     mutate(data);
   };
 
-  const { mutate, data } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (loginCreds: LoginCredentials) => postLogin(loginCreds),
     onSuccess: (data) => {
       if ((data.message = "success")) {

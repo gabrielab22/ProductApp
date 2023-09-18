@@ -1,17 +1,28 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
 import { Company, Product } from "../../types";
-import { useNavigate } from "react-router-dom";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-const postProduct = (data: Product): Promise<any> =>
-  axios.post("product", data).then((response) => response.data);
+const fetchProduct = (id: string): Promise<Product> =>
+  axios.get("product/" + id).then((response) => response.data);
 
 const fetchCompanies = (): Promise<Company[]> =>
   axios.get("company/all").then((response) => response.data);
 
-function AddProduct() {
+const putProduct = (product: Product, productId?: number): Promise<Product> =>
+  axios
+    .put("product/update/" + productId, product)
+    .then((response) => response.data);
+
+function EditProduct() {
+  let params = useParams();
   const navigate = useNavigate();
+
+  const { data: product } = useQuery({
+    queryKey: ["product"],
+    queryFn: () => fetchProduct(params.id!),
+  });
 
   const { data: companies } = useQuery({
     queryKey: ["companies"],
@@ -23,15 +34,14 @@ function AddProduct() {
     handleSubmit,
     formState: { errors },
   } = useForm<Product>();
-
   const onSubmit: SubmitHandler<Product> = (data) => {
     mutate(data);
   };
 
-  const { mutate, data } = useMutation({
-    mutationFn: (product: Product) => postProduct(product),
-    onSuccess: (data) => {
-      if (data.name) navigate("/product/all");
+  const { mutate } = useMutation({
+    mutationFn: (data: Product) => putProduct(data, product?.id),
+    onSuccess: () => {
+      navigate(`/product/details/${product?.id}`);
     },
     onError: () => alert("Problems"),
   });
@@ -41,10 +51,12 @@ function AddProduct() {
       className="flex flex-col rounded border-teal-900 gap-5 border-2 p-5"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h2 className="font-bold text-2xl">Add Product</h2>
+      <h2 className="font-bold text-2xl">Edit Product</h2>
+
       <div className="flex flex-col">
         <label>Name:</label>
         <input
+          defaultValue={product?.name}
           className="border-teal-900 p-2 border-2 rounded bg-teal-100"
           {...register("name", { required: true })}
         />
@@ -52,9 +64,11 @@ function AddProduct() {
           <span className="text-red-700">This field is required</span>
         )}
       </div>
+
       <div className="flex flex-col">
         <label>Price:</label>
         <input
+          defaultValue={product?.price}
           type="number"
           className="border-teal-900 p-2 border-2 rounded bg-teal-100"
           {...register("price", { required: true })}
@@ -67,6 +81,7 @@ function AddProduct() {
       <div className="flex flex-col">
         <label>Type:</label>
         <input
+          defaultValue={product?.type}
           className="border-teal-900 p-2 border-2 rounded bg-teal-100"
           {...register("type", { required: true })}
         />
@@ -79,6 +94,7 @@ function AddProduct() {
         <label>Availability:</label>
         <input
           type="number"
+          defaultValue={product?.availability}
           className="border-teal-900 p-2 border-2 rounded bg-teal-100"
           {...register("availability", { required: true })}
         />
@@ -90,6 +106,7 @@ function AddProduct() {
       <div className="flex flex-col">
         <label>Company:</label>
         <select
+          defaultValue={product?.companyId}
           className="border-teal-900 p-2 border-2 rounded bg-teal-100 cursor-pointer"
           {...register("companyId")}
         >
@@ -117,4 +134,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default EditProduct;

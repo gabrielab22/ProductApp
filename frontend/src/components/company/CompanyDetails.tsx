@@ -28,7 +28,7 @@ function CompanyDetails() {
         <div className="font-bold text-2xl">Company Details</div>
         {isAdmin && (
           <Link
-            to=""
+            to={`../edit/${params.id}`}
             className="bg-teal-900 font-bold text-white rounded p-2 ml-auto cursor-pointer hover:scale-105 transition"
           >
             Edit
