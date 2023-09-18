@@ -12,6 +12,8 @@ module.exports = {
           email: "gabriela@email.com",
           password: "test123",
           rola: "ADMIN",
+          createdAt: "2021-10-17 15:40:10",
+          updatedAt: "2021-10-17 15:40:10",
         },
       ],
       {}

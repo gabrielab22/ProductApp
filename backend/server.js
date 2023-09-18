@@ -34,7 +34,7 @@ app.use("/product", product);
 const connect = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
+  password: "abc123",
   database: "Products",
 });
 
