@@ -10,6 +10,8 @@ import AddProduct from "./components/product/AddProduct";
 import Products from "./components/product/Products";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
   const queryClient = new QueryClient();
@@ -18,9 +20,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className="App">
         <Navbar />
-        <div className="w-full px-10 pt-5 text-teal-900">
+        <div className="w-10/12 mx-auto pt-5 text-teal-900">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
 
             <Route path="product">
               <Route path="all" element={<Products />} />

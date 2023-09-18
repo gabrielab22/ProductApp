@@ -14,3 +14,13 @@ export interface Company {
   id: number;
   name: string;
 }
+
+export interface LoginResponse {
+  message: string;
+  token: string;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
