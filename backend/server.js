@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const port = 8080;
 const mysql = require("mysql2");
+const authJwt = require("./middleware/authJwt");
 
 app.use(express.json());
 app.use(
@@ -15,8 +16,20 @@ app.get("/", (req, res) => {
 });
 
 //Routes
+const register = require("./routes/register");
+app.use("/register", register);
+
+const login = require("./routes/login");
+app.use("/login", login);
+
+const meRouter = require("./routes/me");
+app.use("/me", authJwt.verifyToken, meRouter);
+
 const company = require("./routes/company");
 app.use("/company", company);
+
+const product = require("./routes/product");
+app.use("/product", product);
 
 const connect = mysql.createConnection({
   host: "localhost",
