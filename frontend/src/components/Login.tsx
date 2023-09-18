@@ -1,17 +1,67 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { LoginCredentials, LoginResponse } from "../types";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
-const fetchProduct = (data: LoginCredentials): Promise<LoginResponse> =>
-  axios.post("login", { body: data }).then((response) => response.data);
+const postLogin = (data: LoginCredentials): Promise<LoginResponse> =>
+  axios.post("login", data).then((response) => response.data);
 
 function Login() {
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginCredentials>();
+  const onSubmit: SubmitHandler<LoginCredentials> = (data) => {
+    mutate(data);
+  };
+
   const { mutate, data } = useMutation({
-    mutationFn: (loginCreds: LoginCredentials) => fetchProduct(loginCreds),
+    mutationFn: (loginCreds: LoginCredentials) => postLogin(loginCreds),
+    onSuccess: (data) => {
+      if ((data.message = "success")) {
+        localStorage.setItem("token", data.token);
+        window.dispatchEvent(new Event("storage"));
+      }
+      navigate("/product/all");
+    },
+    onError: () => alert("Email and password don't match."),
   });
 
   return (
-    <div className="w-full border-teal-900 border-2 p-3 rounded bg-teal-100 flex-col"></div>
+    <>
+      <form
+        className="flex flex-col rounded border-teal-900 gap-5 border-2 p-5"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="flex flex-col">
+          <label>Email:</label>
+          <input
+            defaultValue="gabriela@email.com"
+            className="border-teal-900 p-2 border-2 rounded bg-teal-100"
+            {...register("email", { required: true })}
+          />
+          {errors.email && <span>This field is required</span>}
+        </div>
+        <div className="flex flex-col">
+          <label>Password:</label>
+          <input
+            defaultValue="test123"
+            className="border-teal-900 p-2 border-2 rounded bg-teal-100"
+            {...register("password", { required: true })}
+          />
+          {errors.password && <span>This field is required</span>}
+        </div>
+
+        <input
+          className="bg-teal-900 font-bold text-white rounded w-32 p-2 ml-auto cursor-pointer hover:scale-105 transition"
+          type="submit"
+        />
+      </form>
+    </>
   );
 }
 

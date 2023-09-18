@@ -20,6 +20,7 @@ function Products() {
         <div className="flex gap-3 flex-col">
           {data?.map((product) => (
             <Link
+              key={product.id}
               to={`../details/${product.id}`}
               className="w-full border-teal-900 border-2 p-3 rounded bg-teal-100 flex justify-between hover:scale-105 transition cursor-pointer"
             >
