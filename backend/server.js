@@ -28,15 +28,16 @@ const meRouter = require("./routes/me");
 app.use("/me", authJwt.verifyToken, meRouter);
 
 const company = require("./routes/company");
-app.use("/company", company);
+app.use("/company", authJwt.verifyToken, company);
 
 const product = require("./routes/product");
-app.use("/product", product);
+app.use("/product", authJwt.verifyToken, product);
 
 const connect = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "abc123",
+  password: "",
+  // "password": "abc123",
   database: "Products",
 });
 
