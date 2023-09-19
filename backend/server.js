@@ -3,7 +3,9 @@ const app = express();
 const port = 8080;
 const mysql = require("mysql2");
 const authJwt = require("./middleware/authJwt");
+var cors = require("cors");
 
+app.use(cors());
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -34,7 +36,7 @@ app.use("/product", product);
 const connect = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
+  password: "abc123",
   database: "Products",
 });
 

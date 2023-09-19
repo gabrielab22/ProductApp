@@ -100,7 +100,7 @@ router.delete("/:productId", async (req, res) => {
     }
 
     await product.destroy();
-    res.status(500).json({ message: "Succes deleted product" });
+    res.status(200).json({ message: "Succes deleted product" });
 
     res.status(204).end();
   } catch (error) {

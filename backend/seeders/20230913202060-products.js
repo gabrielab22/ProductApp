@@ -4,37 +4,41 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert(
-      "Company",
+      "Product",
       [
         {
-          name: "Samsung",
-          country: "Korea",
-          birth: "1997",
-          employee: 5000,
+          name: "Redmi Note 10",
+          price: 4009,
+          type: "smartphone",
+          availability: 27,
+          companyId: 2,
           createdAt: "2021-10-17 15:40:10",
           updatedAt: "2021-10-17 15:40:10",
         },
         {
-          name: "Xaomi",
-          country: "China",
-          birth: "2010",
-          employee: 8000,
+          name: "Galaxy s23",
+          price: 5004,
+          type: "smartphone",
+          availability: 21,
+          companyId: 1,
           createdAt: "2021-10-17 15:40:10",
           updatedAt: "2021-10-17 15:40:10",
         },
         {
-          name: "Huawei",
-          country: "China",
-          birth: "1987",
-          employee: 10000,
+          name: "Galaxy A50",
+          price: 3660,
+          type: "smartphone",
+          availability: 16,
+          companyId: 1,
           createdAt: "2021-10-17 15:40:10",
           updatedAt: "2021-10-17 15:40:10",
         },
         {
-          name: "Nokia",
-          country: "Finska",
-          birth: "1865",
-          employee: 8000,
+          name: "Windows phone",
+          price: 2000,
+          type: "mobile phone-smartphone",
+          availability: 21,
+          companyId: 4,
           createdAt: "2021-10-17 15:40:10",
           updatedAt: "2021-10-17 15:40:10",
         },
@@ -44,6 +48,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("Company", null, {});
+    await queryInterface.bulkDelete("Product", null, {});
   },
 };

@@ -28,7 +28,11 @@ router.post("/", async (req, res) => {
           }
         );
 
-        return res.json({ message: "success", token });
+        return res.json({
+          message: "success",
+          token,
+          isAdmin: user.rola === "ADMIN",
+        });
       } else {
         return res.status(400).json("Bad request. Password don't match ");
       }
