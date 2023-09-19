@@ -9,9 +9,15 @@ axios.defaults.baseURL = "http://localhost:8080";
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-window.addEventListener("storage", () => {
+const setToken = () => {
   const token = localStorage.getItem("token");
   if (token) axios.defaults.headers.common["x-access-token"] = token;
+};
+
+setToken();
+
+window.addEventListener("storage", () => {
+  setToken();
 });
 
 const root = ReactDOM.createRoot(
