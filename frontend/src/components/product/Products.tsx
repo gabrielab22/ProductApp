@@ -12,6 +12,15 @@ const fetchCompanies = (): Promise<Company[]> =>
 
 function Products() {
   const [productsToShow, setProductsToShow] = useState<Product[]>([]);
+  const [filters, setFilters] = useState<{
+    companyId: string;
+    priceMin: number;
+    priceMax: number;
+  }>({
+    companyId: "*",
+    priceMin: 0,
+    priceMax: 99999999999999,
+  });
   const [isAdmin, setIsAdmin] = useState<boolean>(
     localStorage.getItem("isAdmin") === "true"
   );
@@ -27,12 +36,23 @@ function Products() {
     queryFn: fetchCompanies,
   });
 
-  const handleCountryFilter = (companyId: string) => {
-    if (companyId === "*") setProductsToShow(data!);
+  const handleFilter = () => {
+    let productsToFilter = data;
+    console.log(filters);
+
+    if (filters.companyId === "*") setProductsToShow(data!);
     else
-      setProductsToShow(
-        data!.filter((product) => product.companyId === Number(companyId))
+      productsToFilter = productsToFilter!.filter(
+        (product) => product.companyId === Number(filters.companyId)
       );
+    productsToFilter = productsToFilter?.filter(
+      (product) => product.price > filters.priceMin
+    );
+    productsToFilter = productsToFilter?.filter(
+      (product) => product.price < filters.priceMax
+    );
+
+    setProductsToShow(productsToFilter!);
   };
 
   useEffect(() => {
@@ -43,7 +63,7 @@ function Products() {
     <div className="flex flex-col gap-5">
       Filter by country:
       <select
-        onChange={(e) => handleCountryFilter(e.target.value)}
+        onChange={(e) => setFilters({ ...filters, companyId: e.target.value })}
         className="border-2 rounded border-teal-900 p-1"
       >
         <option value={"*"}>*</option>
@@ -51,6 +71,23 @@ function Products() {
           <option value={company.id}>{company.name}</option>
         ))}
       </select>
+      Price Min:
+      <input
+        type="number"
+        className="border-2 rounded border-teal-900 p-1"
+        onChange={(e) =>
+          setFilters({ ...filters, priceMin: Number(e.target.value) })
+        }
+      />
+      Price Max:
+      <input
+        type="number"
+        className="border-2 rounded border-teal-900 p-1"
+        onChange={(e) =>
+          setFilters({ ...filters, priceMax: Number(e.target.value) })
+        }
+      />
+      <button onClick={() => handleFilter()}>Apply Filter</button>
       {isAdmin && (
         <Link
           to={`../add`}
