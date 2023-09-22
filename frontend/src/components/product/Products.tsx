@@ -75,7 +75,6 @@ function Products() {
         Price Min:
         <input
           type="number"
-          defaultValue={filters.priceMin}
           className="border-2 rounded border-teal-900 p-1"
           onChange={(e) =>
             setFilters({ ...filters, priceMin: Number(e.target.value) })
@@ -84,7 +83,6 @@ function Products() {
         Price Max:
         <input
           type="number"
-          defaultValue={filters.priceMax}
           className="border-2 rounded border-teal-900 p-1"
           onChange={(e) =>
             setFilters({ ...filters, priceMax: Number(e.target.value) })
