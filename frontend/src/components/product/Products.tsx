@@ -38,7 +38,6 @@ function Products() {
 
   const handleFilter = () => {
     let productsToFilter = data;
-    console.log(filters);
 
     if (filters.companyId === "*") setProductsToShow(data!);
     else
@@ -62,7 +61,7 @@ function Products() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2 p-5 border-dashed border-teal-500 border-2">
-        Filter by country:
+        Filter by company:
         <select
           onChange={(e) =>
             setFilters({ ...filters, companyId: e.target.value })
