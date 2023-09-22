@@ -39,8 +39,7 @@ function Products() {
   const handleFilter = () => {
     let productsToFilter = data;
 
-    if (filters.companyId === "*") setProductsToShow(data!);
-    else
+    if (filters.companyId !== "*")
       productsToFilter = productsToFilter!.filter(
         (product) => product.companyId === Number(filters.companyId)
       );
