@@ -61,33 +61,42 @@ function Products() {
 
   return (
     <div className="flex flex-col gap-5">
-      Filter by country:
-      <select
-        onChange={(e) => setFilters({ ...filters, companyId: e.target.value })}
-        className="border-2 rounded border-teal-900 p-1"
-      >
-        <option value={"*"}>*</option>
-        {companies?.map((company, key) => (
-          <option value={company.id}>{company.name}</option>
-        ))}
-      </select>
-      Price Min:
-      <input
-        type="number"
-        className="border-2 rounded border-teal-900 p-1"
-        onChange={(e) =>
-          setFilters({ ...filters, priceMin: Number(e.target.value) })
-        }
-      />
-      Price Max:
-      <input
-        type="number"
-        className="border-2 rounded border-teal-900 p-1"
-        onChange={(e) =>
-          setFilters({ ...filters, priceMax: Number(e.target.value) })
-        }
-      />
-      <button onClick={() => handleFilter()}>Apply Filter</button>
+      <div className="flex flex-col gap-2 p-5 border-dashed border-teal-500 border-2">
+        Filter by country:
+        <select
+          onChange={(e) =>
+            setFilters({ ...filters, companyId: e.target.value })
+          }
+          className="border-2 rounded border-teal-900 p-1"
+        >
+          <option value={"*"}>*</option>
+          {companies?.map((company, key) => (
+            <option value={company.id}>{company.name}</option>
+          ))}
+        </select>
+        Price Min:
+        <input
+          type="number"
+          className="border-2 rounded border-teal-900 p-1"
+          onChange={(e) =>
+            setFilters({ ...filters, priceMin: Number(e.target.value) })
+          }
+        />
+        Price Max:
+        <input
+          type="number"
+          className="border-2 rounded border-teal-900 p-1"
+          onChange={(e) =>
+            setFilters({ ...filters, priceMax: Number(e.target.value) })
+          }
+        />
+        <button
+          className="bg-teal-500 m-4 font-bold text-white rounded w-32 p-2 ml-auto cursor-pointer hover:scale-105 transition"
+          onClick={() => handleFilter()}
+        >
+          Apply Filters
+        </button>
+      </div>
       {isAdmin && (
         <Link
           to={`../add`}
