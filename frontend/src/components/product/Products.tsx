@@ -1,13 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Product } from "../../types";
+import { Company, Product } from "../../types";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const fetchProducts = (): Promise<Product[]> =>
   axios.get("product/all").then((response) => response.data);
 
+const fetchCompanies = (): Promise<Company[]> =>
+  axios.get("company/all").then((response) => response.data);
+
 function Products() {
+  const [productsToShow, setProductsToShow] = useState<Product[]>([]);
   const [isAdmin, setIsAdmin] = useState<boolean>(
     localStorage.getItem("isAdmin") === "true"
   );
@@ -18,9 +22,35 @@ function Products() {
     queryKey: ["products"],
     queryFn: fetchProducts,
   });
+  const { data: companies } = useQuery({
+    queryKey: ["companies"],
+    queryFn: fetchCompanies,
+  });
+
+  const handleCountryFilter = (companyId: string) => {
+    if (companyId === "*") setProductsToShow(data!);
+    else
+      setProductsToShow(
+        data!.filter((product) => product.companyId === Number(companyId))
+      );
+  };
+
+  useEffect(() => {
+    setProductsToShow(data!);
+  }, [data]);
 
   return (
     <div className="flex flex-col gap-5">
+      Filter by country:
+      <select
+        onChange={(e) => handleCountryFilter(e.target.value)}
+        className="border-2 rounded border-teal-900 p-1"
+      >
+        <option value={"*"}>*</option>
+        {companies?.map((company, key) => (
+          <option value={company.id}>{company.name}</option>
+        ))}
+      </select>
       {isAdmin && (
         <Link
           to={`../add`}
@@ -33,7 +63,7 @@ function Products() {
         <div>Loading</div>
       ) : (
         <div className="flex gap-3 flex-col">
-          {data?.map((product) => (
+          {productsToShow?.map((product) => (
             <Link
               key={product.id}
               to={`../details/${product.id}`}
